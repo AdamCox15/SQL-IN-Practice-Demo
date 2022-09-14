@@ -23,5 +23,24 @@ getUserInfo: (req, res) => {
     .then(dbRes => res.status(200).send(dbRes[0]))
     .catch(err => console.log(err))
     
-}
+ },
+ updateUserInfo: (req, res) => {
+    const {firstName, lastName, phoneNumber, email, address, city, state, zipCode} = req.body;
+    sequelize.query(`UPDATE cc_users SET 
+    first_name = '${firstName}',
+    last_name = '${lastName}',
+    email = '${email}',
+    phone_number = ${phoneNumber}
+    WHERE user_id = ${userId};
+    
+    UPDATE cc_clients SET
+    address = '${address}',
+    city = '${city}',
+    state = '${state}',
+    zip_code = ${zipCode}
+    WHERE user_id = ${userId};`)
+    .then(() => res.sendStatus(200))
+    .catch(err => console.log(err))
+},
+
 }

@@ -42,5 +42,18 @@ getUserInfo: (req, res) => {
     .then(() => res.sendStatus(200))
     .catch(err => console.log(err))
 },
-
+getUserAppt: (req, res) => {
+    sequelize.query(`SELECT * FROM cc_appointments
+    WHERE client_id = ${clientId}
+    ORDER BY date DESC;`)
+    .then(dbRes => res.status(200).send(dbRes[0]))
+    .catch(err => console.log(err))
+},
+requestAppointment: (req, res) => {
+    sequelize.query(`INSERT INTO cc_appointments (client_id, date, service_type, notes, approved, completed)
+    VALUES (${clientId}, '${req.body.date}', '${req.body.service}', '', false, false)
+    RETURNING *;`)
+    .then(dbRes => res.status(200).send(dbRes[0]))
+    .catch(err => console.log(err))
+}
 }
